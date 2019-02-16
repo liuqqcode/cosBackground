@@ -54,12 +54,18 @@ export default {
             tableData:[],
             dialogTitle:'',
             centerDialogVisible:false,
-            token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiIxIiwiZXhwIjoiMTU0OTY3NjEwMjM4NjgxMDM0NSIsImlhdCI6IjAifQ.s3PxaZMlkEHw5XADndesvLaFMhD6MiVOHxAJU4Vqe_8"
+            // token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiIxIiwiZXhwIjoiMTU1MDI5NTQzODUyOTg0ODUzMiIsImlhdCI6IjAifQ.oBDxd84M8RuvAdYkxlb84gLzy6-DpWCghcuWOGJmayw"
+        }
+    },
+    computed:{
+        token(){
+            return this.$store.state.token
         }
     },
     methods:{
         getdata(){
-            this.$http.get("https://cosplay.it7e.com/v1/finance/").then(function(data){
+            this.$http.get("https://cosplay.it7e.com/v1/finance/?access_token=" + this.token).then(function(data){
+                
                 for(let i = 0; i < data.data.data.length; i++){
                     data.data.data[i].Type == 0 ? data.data.data[i].Type = '充值' : data.data.data[i].Type = '提现';
                 }
@@ -72,16 +78,24 @@ export default {
             });
         },
         selectRow(val,row){
-            this.$prompt('请输入收款的支付宝账号', '提示', {
+            this.$prompt('请输入转账的订单号', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 inputPattern: /\S/,
                 inputErrorMessage: '格式不正确'
             }).then(({ value }) => {
-                this.$message({
-                    type: 'success',
-                    message: '操作成功'
-                });
+                this.$http.put("https://cosplay.it7e.com/v1/finance/" + row.Id + "?access_token=" + this.token,
+                    {
+                        "Status":1,
+                        "Trade_no": value
+                    }
+                ).then(function(data){
+                    this.$message({
+                        type: 'success',
+                        message: '你提交的订单号是: ' + value
+                    });
+                })
+
             }).catch(() => {
                 this.$message({
                     type: 'info',

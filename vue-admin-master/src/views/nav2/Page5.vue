@@ -55,7 +55,6 @@
 export default {
 	data(){
 		return{
-			token:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiIxIiwiZXhwIjoiMTU0OTY3NjEwMjM4NjgxMDM0NSIsImlhdCI6IjAifQ.s3PxaZMlkEHw5XADndesvLaFMhD6MiVOHxAJU4Vqe_8',
 			userData:[],
 			dialogTitle:'',
 			dialogContent:'',
@@ -63,26 +62,27 @@ export default {
 			file:[]
 		}
 	},
+	computed:{
+        token(){
+            return this.$store.state.token
+        }
+    },
 	methods:{
-		selectRow(val,row){   					//显示弹窗
+		selectRow(val,row){   					//点击显示弹窗
 			this.centerDialogVisible = true,
 			this.dialogTitle = row.Title,
-			this.dialogContent = row.Content,
-			this.userData.forEach(item => {
-				this.$http.get("https://cosplay.it7e.com/v1/attachlist?access_token=" + this.token + "&query=Pid%3A" + item.Id +"&sortby=Id&order=desc").then(function(data){
-					// console.log(data.data.data.File);
-
-					// this.$set(item,'File',data.data.data)
-					// this.file = row.File[0]
-					for(let i = 0 ; i < data.data.data.length ; i++){
-						this.file[i] = "https://cosplay.it7e.com/" + data.data.data[i].File
-					}
-					
-				})
-			});
-
+			this.dialogContent = row.Content;
+			this.getpic(row.Id)
 		},
-		switchChange(val){						//是否展示的开关
+		getpic(Id){
+			this.$http.get("https://cosplay.it7e.com/v1/attachlist?access_token=" + this.token + "&query=Pid%3A" + Id +"&sortby=Id&order=desc").then(function(data){
+				for(let i = 0 ; i < data.data.data.length ; i++){
+
+					this.file[i] = "https://cosplay.it7e.com/" + data.data.data[i].File
+				}
+			})
+		},
+		switchChange(val){						//点击修改开关的值
 			let st = (val.Status == true ? val.Status = 1 : val.Status = 0)
 			this.$http.put("https://cosplay.it7e.com/v1/posts/"+ val.Id +"?access_token=" + this.token,
 				{
@@ -98,10 +98,7 @@ export default {
 		}
 	},
 	created(){
-		// Bus.$on('val',(data) => {
-		// 	console.log(data);
-		// 	this.token = data.token;
-		// }),
+
 		this.$http.get("https://cosplay.it7e.com/v1/posts?access_token=" + this.token).then(function(res){
 			for(let i = 0; i < res.data.data.length; i++){
 				if(res.data.data[i].Status == 0){

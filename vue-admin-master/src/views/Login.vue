@@ -20,7 +20,6 @@
 <script>
   import { requestLogin } from '../api/api';
   import Vue from 'vue'
-  import Bus from './bus.js'
   //import NProgress from 'nprogress'
   Vue.prototype.$appName = 'My App'
 
@@ -64,14 +63,15 @@
                 {
                     emulateJSON:true
                 }
-            ).then((res) => {
-                console.log(res);
+            ).then((res) => {       //登录成功
+                // console.log(res.data.data.token);
                 
+                this.$store.state.token = res.data.data.token
+
                 this.userdata.token = res.data.data.token;
                 this.userdata.username = res.data.data.username;
                 this.userdata.UserAvatar = "https://data.cosplay.it7e.com/" + res.data.data.avatarURL;
                 
-                Bus.$emit('val',this.userdata)
 
                 var loginParams = { username: this.ruleForm2.account, password: this.ruleForm2.checkPass };
                                 
@@ -86,7 +86,7 @@
                         });
                     } else {
                         sessionStorage.setItem('user', JSON.stringify(user));
-                        this.$router.push({ path: '/table' });
+                        this.$router.push({ path: '/Page5' });
                     }
                 });
                 
