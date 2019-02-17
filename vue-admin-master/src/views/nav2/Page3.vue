@@ -52,8 +52,6 @@
 
 <script>
 // import Bus from '../bus.js'
-  import Cookies from 'js-cookie'
-
 export default {
 	data(){
 		return{
@@ -100,13 +98,18 @@ export default {
 		}
 	},
 	created(){
-		Cookies.get("token")
-		this.$http.get("https://cosplay.it7e.com/v1/posts?access_token=" + this.token).then(function(res){
-			res.data.data.map(item => {
-				item.Status == 0 ? item.Status = false : item.Status = true;
-			})
 
-			this.userData = res.data.data
+		this.$http.get("https://cosplay.it7e.com/v1/posts?access_token=" + this.token).then(function(res){
+			for(let i = 0; i < res.data.data.length; i++){
+				if(res.data.data[i].Status == 0){
+                    res.data.data[i].Status = false;
+                    
+				}
+				else if(res.data.data[i].Status == 1){
+                    res.data.data[i].Status = true
+                    this.userData.push(res.data.data[i])
+				}
+            }
 		})
 	}
 }

@@ -14,7 +14,9 @@ import Mock from './mock'
 Mock.bootstrap();
 import 'font-awesome/css/font-awesome.min.css'
 import VueResource from 'vue-resource'
+import Cookies from 'js-cookie'
 
+Vue.use(Cookies)
 Vue.use(VueResource)
 Vue.use(ElementUI)
 Vue.use(VueRouter)

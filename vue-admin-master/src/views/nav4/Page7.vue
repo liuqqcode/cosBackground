@@ -1,7 +1,8 @@
 <template>
     <div>
-        <el-table
+        <el-table   ref="singleTable"
             :data = "datatable"
+            highlight-current-row
             style="100%"
             >
             <el-table-column prop="Id" label="ID" width="100">            </el-table-column>
@@ -13,8 +14,8 @@
             <el-table-column label="会员禁用" align="right"> 
                 <template slot-scope="scope">
                     <el-switch
-                        v-model="scope.status"
-                        @change="changeVip(scope.status)"
+                        v-model="scope.row.Status"
+                        @change="changeVip(scope.row.Status)"
                         active-color="#13ce66"
 					    inactive-color="#ff4949"
                         >
@@ -34,6 +35,11 @@ export default {
     computed:{
         token(){
             return this.$store.state.token
+        }
+    },
+    methods:{
+        changeVip(ID){
+            this.$http.put()
         }
     },
     created(){

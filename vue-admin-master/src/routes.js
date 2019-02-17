@@ -5,6 +5,7 @@ import Main from './views/Main.vue'
 import Table from './views/nav1/Table.vue'
 import Form from './views/nav1/Form.vue'
 import user from './views/nav1/user.vue'
+import Page3 from './views/nav2/Page3.vue'
 import Page4 from './views/nav2/Page4.vue'
 import Page5 from './views/nav2/Page5.vue'
 import Page6 from './views/nav3/Page6.vue'
@@ -42,12 +43,13 @@ let routes = [
     {
         path: '/',
         component: Home,
-        // name: '文章管理',
+        name: '文章管理',
         iconCls: 'fa fa-newspaper-o',
-        leaf: true,
+        // leaf: true,
         children: [
-            // { path: '/page4', component: Page4, name: '页面4' },
-            { path: '/page5', component: Page5, name: '文章管理' }
+            { path: '/page3', component: Page3, name: '已审核'},
+            { path: '/page4', component: Page4, name: '未审核' },
+            { path: '/page5', component: Page5, name: '全部文章' }
         ]
     },
     {

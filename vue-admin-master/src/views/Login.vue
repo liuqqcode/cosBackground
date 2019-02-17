@@ -19,6 +19,7 @@
 
 <script>
   import { requestLogin } from '../api/api';
+  import Cookies from 'js-cookie'
   import Vue from 'vue'
   //import NProgress from 'nprogress'
   Vue.prototype.$appName = 'My App'
@@ -64,15 +65,15 @@
                     emulateJSON:true
                 }
             ).then((res) => {       //登录成功
-                // console.log(res.data.data.token);
-                
+
+                Cookies.set("token",res.data.data.token, { expires: 3 })
+
                 this.$store.state.token = res.data.data.token
 
                 this.userdata.token = res.data.data.token;
                 this.userdata.username = res.data.data.username;
                 this.userdata.UserAvatar = "https://data.cosplay.it7e.com/" + res.data.data.avatarURL;
                 
-
                 var loginParams = { username: this.ruleForm2.account, password: this.ruleForm2.checkPass };
                                 
                 requestLogin(loginParams).then(data => {
