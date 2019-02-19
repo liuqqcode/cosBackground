@@ -9,8 +9,13 @@ import Page3 from './views/nav2/Page3.vue'
 import Page4 from './views/nav2/Page4.vue'
 import Page5 from './views/nav2/Page5.vue'
 import Page6 from './views/nav3/Page6.vue'
+import Page6a from './views/nav3/Page6a.vue'
+import Page6b from './views/nav3/Page6b.vue'
 import echarts from './views/charts/echarts.vue'
 import Page7 from './views/nav4/Page7.vue'
+import Page7a from './views/nav4/Page7-1.vue'
+import Page7b from './views/nav4/Page7-2.vue'
+
 import Page8 from './views/nav5/Page8.vue'
 import Page9 from './views/nav5/Page9.vue'
 
@@ -55,11 +60,12 @@ let routes = [
     {
         path: '/',
         component: Home,
-        name: '',
+        name: '申请认证',
         iconCls: 'fa fa-address-card',
-        leaf: true,//只有一个节点
         children: [
-            { path: '/page6', component: Page6, name: '申请认证' }
+            { path: '/Page6a', component: Page6a, name: '已通过' },
+            { path: '/Page6b', component: Page6b, name: '未通过' },
+            { path: '/Page6', component: Page6, name: '申请认证' }
         ]
     },
     {
@@ -67,8 +73,10 @@ let routes = [
         component: Home,
         name: '会员管理',
         iconCls: 'fa fa-id-card-o',
-        leaf: true,//只有一个节点
         children:[
+            {path: '/Page7-1', component: Page7a, name: '已通过'},
+            {path: '/Page7-2', component: Page7b, name: '未通过'},
+
             {path: '/Page7', component: Page7, name: '会员管理'}
         ]
     },
@@ -77,8 +85,8 @@ let routes = [
         component: Home,
         name: '财务管理',
         iconCls: 'fa fa-money',
-        leaf: true,//只有一个节点
         children:[
+            {path: '/Page8', component: Page8, name: '未审核'},
             {path: '/Page9', component: Page9, name: '流水明细'}
         ]
     },

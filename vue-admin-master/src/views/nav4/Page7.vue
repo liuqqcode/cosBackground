@@ -3,6 +3,7 @@
         <el-table   ref="singleTable"
             :data = "datatable"
             highlight-current-row
+            border
             style="100%"
             >
             <el-table-column prop="Id" label="ID" width="100">            </el-table-column>
@@ -15,7 +16,7 @@
                 <template slot-scope="scope">
                     <el-switch
                         v-model="scope.row.Status"
-                        @change="changeVip(scope.row.Status)"
+                        @change="changeVip(scope.row)"
                         active-color="#13ce66"
 					    inactive-color="#ff4949"
                         >
@@ -38,8 +39,16 @@ export default {
         }
     },
     methods:{
-        changeVip(ID){
-            this.$http.put()
+        changeVip(row){
+			let st = (row.Status == true ? row.Status = 1 : row.Status = 0)
+
+            this.$http.put("https://cosplay.it7e.com/v1/superauth/" + row.Id,{
+                "Status": st
+            }).then(function(data){
+                if(data.body.code == 0){
+					row.Status == 0 ? row.Status = false : row.Status = true;
+                }
+            })
         }
     },
     created(){

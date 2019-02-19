@@ -3,7 +3,7 @@
 		<el-table ref="singleTable"
 			:data="userData"
 			highlight-current-row
-			
+			border
 			style="width: 100%">
 			<el-table-column
 				type="index"

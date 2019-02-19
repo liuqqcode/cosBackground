@@ -3,7 +3,7 @@
 		<el-table ref="singleTable"
 			:data="userData"
 			highlight-current-row
-			
+			border
 			style="width: 100%">
 			<el-table-column
 				type="index"
@@ -91,6 +91,9 @@ export default {
 					"Content":val.Content,
 					"Status":st,
 					"Title":val.Title
+				},
+				{
+					emulateJSON:true
 				}
 			).then(function(data){
 				if(data.body.code == 0){

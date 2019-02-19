@@ -54,9 +54,10 @@ export default {
             console.log(data);
             data.data.data.map(item => {
                 item.Status == -1 ? item.Status = true : item.Status = false
+                if(item.Status == false){
+                    this.datatable.push(item)
+                }
             })
-            this.datatable = data.data.data;
-            
         })
     }
 }

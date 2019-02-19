@@ -3,6 +3,7 @@
         <el-table
             ref="singleTable"
             :data="tableData"
+            border
             style="width: 100%">
             <el-table-column
                 prop="Date"

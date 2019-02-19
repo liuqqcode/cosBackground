@@ -53,10 +53,11 @@ export default {
         this.$http.get("https://cosplay.it7e.com/v1/superauth/?access_token=" + this.token).then(function(data){
             console.log(data);
             data.data.data.map(item => {
-                item.Status == -1 ? item.Status = true : item.Status = false
+                item.Status == -1 ? item.Status = true : item.Status = false;
+                if(item.Status == true){
+                    this.datatable.push(item)
+                }
             })
-            this.datatable = data.data.data;
-            
         })
     }
 }
