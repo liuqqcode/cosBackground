@@ -75,11 +75,11 @@ export default {
 			this.getpic(row.Id)
 		},
 		getpic(Id){
+			this.file = [];
 			this.$http.get("https://cosplay.it7e.com/v1/attachlist?access_token=" + this.token + "&query=Pid%3A" + Id +"&sortby=Id&order=desc").then(function(data){
-				for(let i = 0 ; i < data.data.data.length ; i++){
-
-					this.file[i] = "https://cosplay.it7e.com/" + data.data.data[i].File
-				}
+				data.data.data.map(item => {
+					this.file.push("https://cosplay.it7e.com/" + item.File)
+				})
 			})
 		},
 		switchChange(val){						//点击修改开关的值

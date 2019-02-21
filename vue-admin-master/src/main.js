@@ -15,7 +15,10 @@ Mock.bootstrap();
 import 'font-awesome/css/font-awesome.min.css'
 import VueResource from 'vue-resource'
 import Cookies from 'js-cookie'
+import axios from 'axios'
 
+
+Vue.prototype.$axios = axios;
 Vue.use(Cookies)
 Vue.use(VueResource)
 Vue.use(ElementUI)
@@ -50,6 +53,7 @@ new Vue({
   //template: '<App/>',
   router,
   store,
+  axios,
   //components: { App }
   render: h => h(App)
 }).$mount('#app')

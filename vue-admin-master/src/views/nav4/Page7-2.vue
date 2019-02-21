@@ -16,7 +16,7 @@
                 <template slot-scope="scope">
                     <el-switch
                         v-model="scope.row.Status"
-                        @change="changeVip(scope.row.Status)"
+                        @change="changeVip(scope.row)"
                         active-color="#13ce66"
 					    inactive-color="#ff4949"
                         >
@@ -42,7 +42,7 @@ export default {
         changeVip(row){
 			let st = (row.Status == true ? row.Status = 1 : row.Status = 0)
 
-            this.$http.put("https://cosplay.it7e.com/v1/superauth/" + row.Id,{
+            this.$http.put("https://cosplay.it7e.com/v1/user/" + row.Id + "?access_token=" + this.token,{
                 "Status": st
             }).then(function(data){
                 if(data.body.code == 0){
@@ -53,9 +53,8 @@ export default {
     },
     created(){
         this.$http.get("https://cosplay.it7e.com/v1/user/?access_token=" + this.token).then(function(data){
-            console.log(data);
             data.data.data.map(item => {
-                item.Status == 0 ? item.Status = true : item.Status = false
+                item.Status == 0 ? item.Status = false : item.Status = true
                 if(item.Super == 0){
                     this.datatable.push(item);
                 }
