@@ -5,13 +5,13 @@
 			highlight-current-row
 			border
 			style="width: 100%">
-			<el-table-column
+			<!-- <el-table-column
 				type="index"
 				width="100">
-			</el-table-column>
+			</el-table-column> -->
 			<el-table-column
-				property="Title"
-				label="标题"
+				property="Id"
+				label="Id"
 				width="180">
 			</el-table-column>
 			<el-table-column
@@ -104,7 +104,9 @@ export default {
 	},
 	created(){
 		Cookies.get("token")
-		this.$http.get("https://cosplay.it7e.com/v1/posts?access_token=" + this.token).then(function(res){
+		this.$http.get("https://cosplay.it7e.com/v1/posts?access_token=" + this.token + "&reqtype=2").then(function(res){
+			console.log(res);
+			
 			res.data.data.map(item => {
 				item.Status == 0 ? item.Status = false : item.Status = true;
 			})
@@ -114,3 +116,12 @@ export default {
 	}
 }
 </script>
+<style>
+	.el-dialog__body>img{
+		width: 46%;
+		margin: 1.5%;
+		padding: 3px;
+		background: black;
+
+	}
+</style>
