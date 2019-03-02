@@ -74,10 +74,10 @@ let routes = [
         name: '会员管理',
         iconCls: 'fa fa-id-card-o',
         children:[
-            {path: '/Page7-1', component: Page7a, name: '已通过'},
-            {path: '/Page7-2', component: Page7b, name: '未通过'},
+            {path: '/Page7', component: Page7, name: '会员管理'},
+            {path: '/Page7-1', component: Page7a, name: '已禁用'}
+            // {path: '/Page7-2', component: Page7b, name: '未通过'},
 
-            {path: '/Page7', component: Page7, name: '会员管理'}
         ]
     },
     {
