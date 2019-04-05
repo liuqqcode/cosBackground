@@ -46,6 +46,15 @@
 				<el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
 			</span>
 		</el-dialog>
+		<div class="block">
+			<el-pagination
+				@current-change="handleCurrentChange"
+				:current-page.sync="currentPage3"
+				:page-size="20"
+				layout="prev, pager, next, jumper"
+				:total="total">
+			</el-pagination>
+		</div>
 	</div>
 
 </template>
@@ -55,6 +64,8 @@
 export default {
 	data(){
 		return{
+			total: 20,
+			currentPage3:1,
 			userData:[],
 			dialogTitle:'',
 			dialogContent:'',
@@ -68,6 +79,23 @@ export default {
         }
     },
 	methods:{
+		handleCurrentChange(val) {
+			console.log(`当前页: ${val}`);
+			let valnum = `${val}` * 20;
+			this.$http.get("https://cosplay.it7e.com/v1/posts?access_token=" + this.token  + "&reqtype=2&query=Status%3A1&sortby=Id&order=desc&limit=20&offset=" + valnum).then(function(res){
+				for(let i = 0; i < res.data.data.length; i++){
+					if(res.data.data[i].Status == 0){
+						res.data.data[i].Status = false;
+						
+					}
+					else if(res.data.data[i].Status == 1){
+						res.data.data[i].Status = true
+						this.userData.push(res.data.data[i])
+					}
+				}
+				
+			})
+		},
 		selectRow(val,row){   					//点击显示弹窗
 			this.centerDialogVisible = true,
 			this.dialogTitle = row.Title,
@@ -102,7 +130,9 @@ export default {
 	},
 	created(){
 
-		this.$http.get("https://cosplay.it7e.com/v1/posts?access_token=" + this.token  + "&reqtype=2").then(function(res){
+		this.$http.get("https://cosplay.it7e.com/v1/posts?access_token=" + this.token + "&reqtype=2&query=Status%3A1&sortby=Id&order=desc&limit=20").then(function(res){
+			this.total = res.data.data.pop().recordNum;
+			
 			for(let i = 0; i < res.data.data.length; i++){
 				if(res.data.data[i].Status == 0){
                     res.data.data[i].Status = false;
@@ -112,7 +142,8 @@ export default {
                     res.data.data[i].Status = true
                     this.userData.push(res.data.data[i])
 				}
-            }
+			}
+			
 		})
 	}
 }

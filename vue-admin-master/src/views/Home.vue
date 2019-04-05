@@ -75,7 +75,7 @@
 	export default {
 		data() {
 			return {
-				sysName:'cosplay管理平台',
+				sysName:'Kirei管理平台',
 				collapsed:false,
 				sysUserName: '',
 				sysUserAvatar: '',

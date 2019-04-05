@@ -19,16 +19,35 @@
 					    inactive-color="#ff4949"
                         >
                     </el-switch>
+ 					<el-button @click="selectRow(scope.$index, scope.row)" type="primary" plain>查看</el-button>
+
                 </template>
             </el-table-column>
         </el-table>
+		<el-dialog
+			:title="dialogTitle"
+			:visible.sync="centerDialogVisible"
+			width="30%"
+			center>
+			<span>{{dialogContent}}</span><br>
+			<img v-for="(item,index) in file" :key="index" :src="item" alt="" srcset="">
+			<span slot="footer" class="dialog-footer">
+				<el-button @click="centerDialogVisible = false">取 消</el-button>
+				<el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+			</span>
+		</el-dialog>
     </div>
 </template>
 <script>
 export default {
     data(){
         return{
-            datatable:[]
+            datatable:[],
+			dialogTitle:'',
+			dialogContent:'',
+			file:[],
+			centerDialogVisible: false,
+
         }
     },
     computed:{
@@ -47,11 +66,31 @@ export default {
 					row.Status == 0 ? row.Status = false : row.Status = true;
                 }
             })
-        }
+        },
+        selectRow(val,row){   					//点击显示弹窗
+			this.centerDialogVisible = true,
+			this.dialogTitle = row.Title,
+			this.dialogContent = row.Content;
+			this.getpic(row.Id)
+		},
+		getpic(Id){
+			this.file = [];
+			// this.$http.get("https://cosplay.it7e.com/v1/attachlist/?access_token=" + this.token + "&query=Pid%3A" + Id +"&sortby=Id&order=desc").then(function(data){
+            //     console.log(data);
+                
+			// 	data.data.data.map(item => {
+			// 		this.file.push("https://cosplay.it7e.com/" + item.File)
+			// 	})
+            // })
+            this.datatable.map(item => {
+                if(item.Id == Id){
+                    this.file.push("https://cosplay.it7e.com/" + item.PhotoURL)
+                }
+            })
+		},
     },
     created(){
         this.$http.get("https://cosplay.it7e.com/v1/superauth/?access_token=" + this.token).then(function(data){
-            console.log(data);
             data.data.data.map(item => {
                 item.Status == -1 ? item.Status = true : item.Status = false
             })

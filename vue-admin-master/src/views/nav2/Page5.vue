@@ -10,11 +10,13 @@
 				width="100">
 			</el-table-column> -->
 			<el-table-column
+				sortable
 				property="Id"
 				label="Id"
 				width="180">
 			</el-table-column>
 			<el-table-column
+				sortable
 				property="Content"
 				label="内容"
 				>
@@ -46,6 +48,17 @@
 				<el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
 			</span>
 		</el-dialog>
+
+		<div class="block">
+			<el-pagination
+				@size-change="handleSizeChange"
+				@current-change="handleCurrentChange"
+				:current-page.sync="currentPage3"
+				:page-size="20"
+				layout="prev, pager, next, jumper"
+				:total="total">
+			</el-pagination>
+		</div>
 	</div>
 
 </template>
@@ -57,19 +70,37 @@
 export default {
 	data(){
 		return{
+			total: 20,
 			userData:[],
 			dialogTitle:'',
 			dialogContent:'',
 			centerDialogVisible: false,
-			file:[]
+			file:[],
+			currentPage3: 1
 		}
 	},
 	computed:{
         token(){
             return this.$store.state.token
         }
-    },
+		},
+		
 	methods:{
+		handleSizeChange(val) {
+			console.log(`每页 ${val} 条`);
+		},
+		handleCurrentChange(val) {
+			console.log(`当前页: ${val}`);
+			let valnum = `${val}` * 20;
+			this.$http.get("https://cosplay.it7e.com/v1/posts?access_token=" + this.token + "&reqtype=2&sortby=Id&order=desc&limit=20&offset=" + valnum).then(function(res){
+				this.total = res.data.data.pop().recordNum;
+				let resdata = Object.assign({},res.data.data)
+				res.data.data.map(item => {
+					item.Status == 0 ? item.Status = false : item.Status = true;
+				})
+				this.userData = res.data.data
+			})
+		},
 		selectRow(val,row){   					//点击显示弹窗
 			this.centerDialogVisible = true,
 			this.dialogTitle = row.Title,
@@ -78,7 +109,7 @@ export default {
 		},
 		getpic(Id){
 			this.file = [];
-			this.$http.get("https://cosplay.it7e.com/v1/attachlist?access_token=" + this.token + "&query=Pid%3A" + Id +"&sortby=Id&order=desc").then(function(data){
+			this.$http.get("https://cosplay.it7e.com/v1/attachlist/?access_token=" + this.token + "&query=Pid%3A" + Id +"&sortby=Id&order=desc").then(function(data){
 				data.data.data.map(item => {
 					this.file.push("https://cosplay.it7e.com/" + item.File)
 				})
@@ -104,9 +135,9 @@ export default {
 	},
 	created(){
 		Cookies.get("token")
-		this.$http.get("https://cosplay.it7e.com/v1/posts?access_token=" + this.token + "&reqtype=2").then(function(res){
-			console.log(res);
-			
+		this.$http.get("https://cosplay.it7e.com/v1/posts?access_token=" + this.token + "&reqtype=2&sortby=Id&order=desc&limit=20").then(function(res){
+			this.total = res.data.data.pop().recordNum;
+			let resdata = Object.assign({},res.data.data)
 			res.data.data.map(item => {
 				item.Status == 0 ? item.Status = false : item.Status = true;
 			})
